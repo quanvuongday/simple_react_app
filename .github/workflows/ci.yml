@@ -1,0 +1,45 @@
+name: React CI/CD Pipeline
+
+# Trigger the workflow on push or pull request to the main branch
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+# Define the jobs to run in the workflow
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Node.js (specify the version used in your project)
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Step 4: Run tests (if you have tests)
+      - name: Run tests
+        run: npm test
+
+      # Step 5: Build the React app
+      - name: Build the project
+        run: npm run build
+
+      # Step 6: (Optional) Deploy to production
+      # You can add deployment commands here if needed
+      - name: Deploy to production
+        if: github.ref == 'refs/heads/main'
+        run: echo "Deploying to production"
+        # Add deployment commands here (e.g., upload to S3, Firebase, Netlify, etc.)
